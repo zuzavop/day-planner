@@ -1,19 +1,13 @@
 # My Day Planner
+An old project from school that uses Java to enable days scheduling.
 
-## Obsah repositáře
-* zdrojové kódy aplikace v Javě a soubor maven
-* uživatelská dokumentace
-* soubory php, které jsou nahrané i na serveru, 
-přes který se aplikace připojuje k databázi
+## Repository content
+* Java application source code and maven file
+* user documentation
+* php files, through which the application connects to the database
 
-## Poznámka o php scriptech
-Kvůli jednoduchosti testování aplikace jsem se nakonec rozhodla aplikaci k databázi 
-připojit přes php script, který běží na serveru. Avšak ve zdrojových souborech 
-jsem nechala i původní třídu (s názvem "MyConnectionToDatabae"), která využívala 
-knihovny Javy k připojení k databázi (ta však vyžadovala lokální MySQL server 
-a tedy spuštění aplikace by bylo náročné).
+## Note about php scripts
+For simplicity, the application is connected to the database via a php script that runs on the server that connects to the MySQL database. However, the original class (named "MyConnectionToDatabae") that uses Java libraries to connect to the database is also left in the source files.
 
-## Spuštění
-Aplikace by měla být spustitelná po jejích setevením pomocí maven souboru.
-Pro normální chod aplikace je kvůli připojení k databázi zapotřebí připojení k internetu.
-O trochu podrobnější popis je k dispozici v uživatelské dokumentaci.
+## Launching
+The application should be executable after it is built using a maven file. An internet connection is required for the application to run normally due to the database connection. A slightly more detailed description is available in the user documentation.
