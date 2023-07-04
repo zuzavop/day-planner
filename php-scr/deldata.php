@@ -8,7 +8,7 @@ function safe_get(array $params, string $name, $default = null, $regexCheck = nu
 }
 
 $new_id = safe_get($_GET, 'id', '', '/^[0-9]+$/');
-if($new_id === '') {
+if ($new_id === '') {
   http_response_code(500);
   exit;
 }
@@ -20,7 +20,7 @@ if ($connection->connect_error) {
   die("Could not connect to the database");
 }
 
-$sql = "DELETE FROM calendar WHERE id = '" . mysqli_real_escape_string($connection, $new_id) . "'";
+$sql = "DELETE FROM calendar WHERE id = '" . $connection->real_escape_string($new_id) . "'";
 
 if ($connection->query($sql) === TRUE) {
   echo "Record deleted successfully";
