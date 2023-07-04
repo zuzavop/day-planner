@@ -76,22 +76,8 @@ class Planner extends JFrame implements ActionListener {
         // initialize the user interface components
         name = new JTextField();
         year = new JComboBox<>(handler.getYears());
-
-        String[] months = new String[13];
-        months[0] = "ANY";
-
-        for (int i = 1; i < 13; i++)
-            months[i] = Integer.toString(i);
-
-        month = new JComboBox<>(months);
-
-        String[] days = new String[32];
-        days[0] = "ANY";
-
-        for (int i = 1; i < 32; i++)
-            days[i] = Integer.toString(i);
-
-        day = new JComboBox<>(days);
+        month = createNumericComboBox(1, 12);
+        day = createNumericComboBox(1, 31);
 
         // create button - show plan
         query = new JButton("Show My Plans");
@@ -109,6 +95,15 @@ class Planner extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         // show window
         setVisible(true);
+    }
+
+    private JComboBox<String> createNumericComboBox(int start, int end) {
+        String[] values = new String[end - start + 2];
+        values[0] = "ANY";
+        for (int i = start; i <= end; i++) {
+            values[i - start + 1] = Integer.toString(i);
+        }
+        return new JComboBox<>(values);
     }
 
     /**
@@ -199,12 +194,10 @@ class Planner extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == query) {
-            int numberYear, numberMonth, numberDay;
-
             // get the values of parameters
-            numberYear = getValueOfInt((String) Objects.requireNonNull(year.getSelectedItem()));
-            numberMonth = getValueOfInt((String) Objects.requireNonNull(month.getSelectedItem()));
-            numberDay = getValueOfInt((String) Objects.requireNonNull(day.getSelectedItem()));
+            int numberYear = getValueOfInt((String) Objects.requireNonNull(year.getSelectedItem()));
+            int numberMonth = getValueOfInt((String) Objects.requireNonNull(month.getSelectedItem()));
+            int numberDay = getValueOfInt((String) Objects.requireNonNull(day.getSelectedItem()));
             String namePlan = name.getText();
 
             // get the result of query
@@ -228,7 +221,7 @@ class Planner extends JFrame implements ActionListener {
      * @return integer value of given str
      */
     private int getValueOfInt(String str) {
-        if (str.equals("ANY"))
+        if ("ANY".equals(str))
             return -1;
         else
             return Integer.parseInt(str);

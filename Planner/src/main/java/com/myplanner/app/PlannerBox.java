@@ -31,46 +31,61 @@ public class PlannerBox extends JPanel implements ActionListener {
      * @param conn connection to database
      * @param dis  panel where plannerbox is in
      */
-    public PlannerBox(@NotNull Plan p, @NotNull Connection conn, JPanel dis) {
-        connection = conn;
-        plan = p;
-        display = dis;
+    public PlannerBox(@NotNull Plan plan, @NotNull Connection connection, JPanel display) {
+        this.connection = connection;
+        this.plan = plan;
+        this.display = display;
 
-        //set data
+        // set data
         JLabel label1 = new JLabel("Name: ");
         JLabel label2 = new JLabel("Date: ");
         JLabel label3 = new JLabel("Time: ");
         labelName = new JLabel(plan.getName());
         labelDate = new JLabel(plan.getDate());
         labelTime = new JLabel(plan.getTimeText());
+        fieldName = new JTextField(16);
+        fieldDate = new JTextField(16);
+        fieldTime = new JTextField(16);
+
+        initializeComponents();
+        setupLayout();
+    }
+
+    /**
+     * Initializes the components and sets up the button actions.
+     */
+    private void initializeComponents() {
         buttonEdit.addActionListener(this);
         buttonSave.addActionListener(this);
-        buttonSave.setVisible(false);
         buttonDelete.addActionListener(this);
-        buttonDelete.setVisible(false);
-        fieldName = new JTextField(16);
-        fieldName.setVisible(false);
-        fieldTime = new JTextField(16);
-        fieldTime.setVisible(false);
-        fieldDate = new JTextField(16);
-        fieldDate.setVisible(false);
 
-        // set layout of window
+        buttonSave.setVisible(false);
+        buttonDelete.setVisible(false);
+        fieldName.setVisible(false);
+        fieldDate.setVisible(false);
+        fieldTime.setVisible(false);
+    }
+
+    /**
+     * Sets up the layout of the PlannerBox.
+     */
+    private void setupLayout() {
         setBorder(BorderFactory.createTitledBorder(""));
-        GroupLayout showing = new GroupLayout(this);
-        setLayout(showing);
-        showing.setAutoCreateGaps(true);
-        showing.setAutoCreateContainerGaps(true);
-        showing.setHorizontalGroup(showing.createSequentialGroup()
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.TRAILING)
+        GroupLayout layout = new GroupLayout(this);
+        setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);        
+
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(label1)
                         .addComponent(label2)
                         .addComponent(label3))
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(labelName)
                         .addComponent(labelDate)
                         .addComponent(labelTime))
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(fieldName)
                         .addComponent(fieldDate)
                         .addComponent(fieldTime))
@@ -79,21 +94,21 @@ public class PlannerBox extends JPanel implements ActionListener {
                 .addComponent(buttonDelete)
         );
 
-        showing.setVerticalGroup(showing.createSequentialGroup()
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(label1)
                         .addComponent(labelName)
                         .addComponent(fieldName))
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(label2)
                         .addComponent(labelDate)
                         .addComponent(fieldDate))
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(label3)
                         .addComponent(labelTime)
                         .addComponent(fieldTime))
                 .addComponent(buttonEdit)
-                .addGroup(showing.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(buttonSave)
                         .addComponent(buttonDelete))
         );
@@ -107,6 +122,7 @@ public class PlannerBox extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(@NotNull ActionEvent e) {
         boolean show = false;
+        
         if (e.getSource() == buttonEdit) {
             // set values to text field
             fieldName.setText(labelName.getText());
@@ -114,15 +130,17 @@ public class PlannerBox extends JPanel implements ActionListener {
             fieldTime.setText(plan.getTime());
         } else if (e.getSource() == buttonSave) {
             try {
-                if (fieldName.getText().length() == 0) {
+                if (fieldName.getText().isEmpty()) {
                     // set warning - name is empty (must be given)
                     fieldName.setBackground(Color.RED);
                 } else {
                     fieldName.setBackground(Color.WHITE);
                 }
+
                 LocalDate date = AddingNew.getDate(fieldDate.getText()); // parse to valid date
                 fieldDate.setBackground(Color.WHITE);
                 fieldTime.setBackground(Color.WHITE);
+
                 if (plan.setValuesIfValid(fieldName.getText(), fieldTime.getText(), date.getYear(), date.getMonthValue(), date.getDayOfMonth())) {
                     // save changed values
                     labelName.setText(fieldName.getText());

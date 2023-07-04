@@ -217,7 +217,7 @@ class AddingNew extends JPanel implements ActionListener {
     private void actionOnSave() {
         Plan plan = new Plan();
         try {
-            if (name.getText().length() == 0) {
+            if (name.getText().isEmpty()) {
                 // set warning - name is empty (must be given)
                 name.setBackground(Color.RED);
             } else {
@@ -256,7 +256,10 @@ class AddingNew extends JPanel implements ActionListener {
      * @throws DateTimeException throw if date is in invalid format
      */
     public static LocalDate getDate(String text) throws DateTimeException{
-        DateTimeFormatter[] formatter = new DateTimeFormatter[]{DateTimeFormatter.ofPattern("d.M.yyyy"), DateTimeFormatter.ofPattern("d/M/yyyy")};
+        DateTimeFormatter[] formatter = {
+            DateTimeFormatter.ofPattern("d.M.yyyy"), 
+            DateTimeFormatter.ofPattern("d/M/yyyy")
+        };
         for (DateTimeFormatter pattern : formatter) {
             try {
                 // Take a try
